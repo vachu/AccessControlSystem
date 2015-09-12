@@ -35,4 +35,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\AccessPoint\AccessPoint.csproj">
+      <Project>{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}</Project>
+      <Name>AccessPoint</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
