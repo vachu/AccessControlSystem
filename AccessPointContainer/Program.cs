@@ -9,22 +9,50 @@ namespace AccessPointContainer
 		private const string CONTAINER_NAME = "ws://company/access_control_system/demo";
 		public static void Main (string[] args)
 		{
-			string[] accPtIDs = {
-				"/Site1/Dept_1/Bldg_1",
-				"/Site1/Dept_1/Bldg_2",
-				"/Site1/Dept_2/Bldg_1",
-				"/Site1/Dept_2/Bldg_2",
-				"/Site1/Dept_3/Bldg_1",
-				"/Site1/Dept_3/Bldg_2",
-				"ws://company-intranet-url/Site3/Dept_4/Bldg_3",
-					// AccessPoint in a different site / Container
-					// There could be multiple AccessPoint Containers in a single site
-			};
 			var theApp = new MainClass ();
+			string[] accPtIDs = {
+				"/Site1",
+				"/Site1/Dept_1/Bldg_1",
+				"/Site1/Dept_2/Bldg_1",
+				"/Site1/Dept_3/Bldg_2",
+				"ws://company-intranet-url/Site3",
+					// AccessPoint in a different Site / Container
+					// There could be multiple AccessPoint Containers in a single site
+					// In a non-demo code, this would be fetched from a config file
+			};
 
+			// Create all the Access Points
 			foreach (var id in accPtIDs) {
 				s_accPtMap [id] = AccessPoint.Create (theApp, id);
 			}
+
+			/*
+			 * ---- Logically link all AccessPoints ----
+			 * Ideally, this link-creation must be configurable through a config file but
+			 * this is a demo after all.
+			 * */
+			s_accPtMap ["/Site1"].LinkTo ( // Site1's main access point to Site3's
+				s_accPtMap ["ws://company-intranet-url/Site3"],
+				LinkType.Both
+			);
+
+			// Link all Site1's non-main AccessPoints to the main one
+			s_accPtMap ["/Site1/Dept_1/Bldg_1"].LinkTo (
+				s_accPtMap ["/Site1"],
+				LinkType.Both
+			);
+			s_accPtMap ["/Site1/Dept_2/Bldg_1"].LinkTo (
+				s_accPtMap ["/Site1"],
+				LinkType.Both
+			);
+			s_accPtMap ["/Site1/Dept_3/Bldg_2"].LinkTo (
+				s_accPtMap ["/Site1"],
+				LinkType.Both
+			);
+			/*
+			 * ---- All AccessPoint linkings done ----
+			 * */
+
 			Console.WriteLine ("Access Point Container is now running @ {0}\n\n", CONTAINER_NAME);
 
 			Console.Write ("Press the buzzword to quit: ");
@@ -37,7 +65,7 @@ namespace AccessPointContainer
 		#region IAccessPointContainer implementation
 
 		private static Dictionary<string, IAccessPoint> s_accPtMap =
-			new Dictionary<string, IAccessPoint> ();
+			new Dictionary<string, IAccessPoint>(StringComparer.CurrentCultureIgnoreCase);
 
 		public IAccessPoint GetAccessPoint (string accPtID)
 		{
