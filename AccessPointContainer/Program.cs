@@ -1,12 +1,14 @@
 ﻿using System;
 using Crossover;
 using System.Collections.Generic;
+using WebSocketSharp;
+using WebSocketSharp.Server;
 
 namespace AccessPointContainer
 {
 	class MainClass : IAccessPointContainer
 	{
-		private const string CONTAINER_NAME = "ws://company/access_control_system/demo";
+		private const string CONTAINER_NAME = "/Site1/access_control_system/demo";
 		public static void Main (string[] args)
 		{
 			var theApp = new MainClass ();
@@ -53,13 +55,23 @@ namespace AccessPointContainer
 			 * ---- All AccessPoint linkings done ----
 			 * */
 
-			Console.WriteLine ("Access Point Container is now running @ {0}\n\n", CONTAINER_NAME);
+			/* 
+			 * Start the Websocket Server to listen to incoming requests
+			 * */
+			var wssvr = new WebSocketServer ("ws://localhost:55555");
+			wssvr.AddWebSocketService<WebsocketSvr> (CONTAINER_NAME);
+			wssvr.Start ();
+			if (wssvr.IsListening) {
+				Console.WriteLine ("Access Point Container running @ {0}\n\n", CONTAINER_NAME);
 
-			Console.Write ("Press the buzzword to quit: ");
-			var input = Console.ReadLine ();
-			while (string.Compare (input.Trim (), "shutdown", true) != 0) {
-				input = Console.ReadLine ();
-			} // Longevity loop
+				Console.Write ("Type in the buzzword to quit: ");
+				var input = Console.ReadLine ();
+				while (string.Compare (input.Trim (), "shutdown", true) != 0) {
+					input = Console.ReadLine ();
+				} // Longevity loop
+			}
+
+			wssvr.Stop ();
 		}
 
 		#region IAccessPointContainer implementation
