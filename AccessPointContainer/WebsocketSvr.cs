@@ -4,7 +4,7 @@ using WebSocketSharp.Server;
 
 namespace AccessPointContainer
 {
-	public class WebsocketSvr : WebSocketBehavior
+	public class Behaviour : WebSocketBehavior
 	{
 		protected override void OnMessage(MessageEventArgs e)
 		{

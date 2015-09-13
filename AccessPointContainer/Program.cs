@@ -6,12 +6,15 @@ using WebSocketSharp.Server;
 
 namespace AccessPointContainer
 {
-	class MainClass : IAccessPointContainer
+	class MainClass
 	{
 		private const string CONTAINER_NAME = "/Site1/access_control_system/demo";
+
+		private static Dictionary<string, IAccessPoint> s_accPtMap =
+			new Dictionary<string, IAccessPoint>(StringComparer.CurrentCultureIgnoreCase);
+
 		public static void Main (string[] args)
 		{
-			var theApp = new MainClass ();
 			string[] accPtIDs = {
 				"/Site1",
 				"/Site1/Dept_1/Bldg_1",
@@ -25,13 +28,13 @@ namespace AccessPointContainer
 
 			// Create all the Access Points
 			foreach (var id in accPtIDs) {
-				s_accPtMap [id] = AccessPoint.Create (theApp, id);
+				s_accPtMap [id] = AccessPointFactory.Create (id);
 			}
 
 			/*
 			 * ---- Logically link all AccessPoints ----
-			 * Ideally, this link-creation must be configurable through a config file but
-			 * this is a demo after all.
+			 * Ideally, this link-creation must be configurable through a config file or
+			 * a Configuration Utlity but this is a demo after all.
 			 * */
 			s_accPtMap ["/Site1"].LinkTo ( // Site1's main access point to Site3's
 				s_accPtMap ["ws://company-intranet-url/Site3"],
@@ -51,6 +54,7 @@ namespace AccessPointContainer
 				s_accPtMap ["/Site1"],
 				LinkType.Both
 			);
+			AccessPointFactory.DumpAccessPointLinks (s_accPtMap);
 			/*
 			 * ---- All AccessPoint linkings done ----
 			 * */
@@ -59,7 +63,7 @@ namespace AccessPointContainer
 			 * Start the Websocket Server to listen to incoming requests
 			 * */
 			var wssvr = new WebSocketServer ("ws://localhost:55555");
-			wssvr.AddWebSocketService<WebsocketSvr> (CONTAINER_NAME);
+			wssvr.AddWebSocketService<Behaviour> (CONTAINER_NAME);
 			wssvr.Start ();
 			if (wssvr.IsListening) {
 				Console.WriteLine ("Access Point Container running @ {0}\n\n", CONTAINER_NAME);
@@ -73,29 +77,5 @@ namespace AccessPointContainer
 
 			wssvr.Stop ();
 		}
-
-		#region IAccessPointContainer implementation
-
-		private static Dictionary<string, IAccessPoint> s_accPtMap =
-			new Dictionary<string, IAccessPoint>(StringComparer.CurrentCultureIgnoreCase);
-
-		public IAccessPoint GetAccessPoint (string accPtID)
-		{
-			if (string.IsNullOrWhiteSpace (accPtID) ||
-				!s_accPtMap.ContainsKey(accPtID.Trim()))
-			{
-				return null;
-			}
-			return s_accPtMap [accPtID.Trim ()];
-		}
-
-
-		public string[] GetAccessPointIDs ()
-		{
-			string[] IDs = new string[s_accPtMap.Keys.Count];
-			s_accPtMap.Keys.CopyTo (IDs, 0);
-			return IDs;
-		}
-		#endregion
 	}
 }

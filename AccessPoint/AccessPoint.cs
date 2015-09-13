@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Crossover
 {
-	public class AccessPoint : IAccessPoint
+	public static class AccessPointFactory
 	{
-		public static IAccessPoint Create(IAccessPointContainer cont, string ID)
+		public static IAccessPoint Create(string ID)
 		{
-			if (string.IsNullOrWhiteSpace (ID) || cont == null)
+			if (string.IsNullOrWhiteSpace (ID))
 				return null;
 
 			ID = ID.Trim ().ToLower ();
@@ -18,21 +18,40 @@ namespace Crossover
 			 * based on the URL type
 			 * */
 			else
-				return new AccessPoint (cont, ID);
+				return new AccessPoint (ID);
 		}
 
-		private IAccessPointContainer m_container;
+		public static void DumpAccessPointLinks(Dictionary<string, IAccessPoint> accPtMap)
+		{
+			foreach (var key in accPtMap.Keys) {
+				Console.WriteLine ("AccessPoint ID: {0} -->", accPtMap[key].ID);
+
+				if ((accPtMap [key]) is AccessPoint) {
+					Console.WriteLine ("\tPulls:");
+					foreach (var val in ((AccessPoint)accPtMap[key]).m_listPull) {
+						Console.WriteLine ("\t\t{0}", val.ID);
+					}
+					Console.WriteLine ("\tPushes:");
+					foreach (var val in ((AccessPoint)accPtMap[key]).m_listPull) {
+						Console.WriteLine ("\t\t{0}", val.ID);
+					}
+				}
+			}
+		}
+	}
+
+	internal class AccessPoint : IAccessPoint
+	{
 		private string m_ID;
 
-		internal AccessPoint (IAccessPointContainer cont, string ID)
+		internal AccessPoint (string ID)
 		{
-			m_container = cont;
 			m_ID = ID;
 		}
 
 		#region IAccessPoint implementation
-		private List<IAccessPoint> m_listPush = new List<IAccessPoint> ();
-		private List<IAccessPoint> m_listPull = new List<IAccessPoint> ();
+		internal List<IAccessPoint> m_listPush = new List<IAccessPoint> ();
+		internal List<IAccessPoint> m_listPull = new List<IAccessPoint> ();
 
 		/// <summary>
 		/// Links this AccessPoint object to another AccessPoint object for message / event passing
@@ -48,24 +67,41 @@ namespace Crossover
 				throw new ArgumentNullException ("otherAccPt");
 			}
 
-			if ((linkType & LinkType.Both) == LinkType.Pull) {
+			switch (linkType) {
+			case LinkType.Pull:
 				m_listPull.Add (otherAccPt);
-			}
-			if ((linkType & LinkType.Both) == LinkType.Push) {
+				break;
+			case LinkType.Push:
 				m_listPush.Add (otherAccPt);
+				break;
+			default:
+				m_listPull.Add (otherAccPt);
+				m_listPush.Add (otherAccPt);
+				break;
 			}
 		}
 
+		public string ID {
+			get {
+				return m_ID;
+			}
+		}
 		#endregion
 	}
 
 	internal class RemoteAccessPointProxy : IAccessPoint
 	{
-		private string m_accPtID;
+		private string m_ID;
 
 		internal RemoteAccessPointProxy(string accPtID)
 		{
-			m_accPtID = accPtID;
+			m_ID = accPtID;
+		}
+
+		public string ID {
+			get {
+				return m_ID;
+			}
 		}
 
 		#region IAccessPoint implementation

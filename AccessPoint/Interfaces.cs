@@ -40,6 +40,7 @@
 	/// </summary>
 	public interface IAccessPoint : IManager, IAdmin, IMonitorControl, IPull, IPush
 	{
+		string ID  { get; }
 		/// <summary>
 		/// Links this AccessPoint object to another AccessPoint object for message / event passing
 		/// </summary>
@@ -61,14 +62,5 @@
 		Push = 1,
 		Pull,
 		Both
-	}
-	/// <summary>
-	/// This interface must be implemented by the "hosting" app / module - could be
-	/// a simple Console App or a Service
-	/// </summary>
-	public interface IAccessPointContainer
-	{
-		IAccessPoint GetAccessPoint(string accPtID);
-		string[] GetAccessPointIDs();
 	}
 }
