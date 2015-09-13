@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessPoint", "AccessPoint\AccessPoint.csproj", "{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessPointContainer", "AccessPointContainer\AccessPointContainer.csproj", "{105317E5-942A-4DA9-A442-9A7F6C555477}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebsocketClient", "TestWebsocketClient\TestWebsocketClient.csproj", "{555FF67A-E286-4816-B1B4-61FA1E675B8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{105317E5-942A-4DA9-A442-9A7F6C555477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105317E5-942A-4DA9-A442-9A7F6C555477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105317E5-942A-4DA9-A442-9A7F6C555477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105317E5-942A-4DA9-A442-9A7F6C555477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
