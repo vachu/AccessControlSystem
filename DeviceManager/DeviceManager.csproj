@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{105317E5-942A-4DA9-A442-9A7F6C555477}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>AccessPointContainer</RootNamespace>
-    <AssemblyName>AccessPointContainer</AssemblyName>
+    <ProjectGuid>{5733ACCA-E893-4060-82B6-1F7DF0BDC7AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DeviceManager</RootNamespace>
+    <AssemblyName>DeviceManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,7 +17,7 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -25,7 +25,7 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -34,24 +34,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebsocketSvr.cs" />
-    <Compile Include="ManagerOps.cs" />
+    <Compile Include="DeviceManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\AccessPoint\AccessPoint.csproj">
-      <Project>{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}</Project>
-      <Name>AccessPoint</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AccessPointDAL\AccessPointDAL.csproj">
-      <Project>{7B6421C2-96CE-4A62-A885-9724EF417B29}</Project>
-      <Name>AccessPointDAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DeviceManager\DeviceManager.csproj">
-      <Project>{5733ACCA-E893-4060-82B6-1F7DF0BDC7AD}</Project>
-      <Name>DeviceManager</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

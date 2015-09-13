@@ -22,10 +22,10 @@ namespace Crossover
 			}
 		}
 
-		private struct employeeRecord {
+		private struct EmployeeRecord {
 			string EmpID;
 			string AccessPointID;
-			public employeeRecord(string id, string accPtId)
+			public EmployeeRecord(string id, string accPtId)
 			{
 				EmpID = id;
 				AccessPointID = accPtId;
@@ -47,7 +47,7 @@ namespace Crossover
 		}
 
 		private static List<ManagerRecord> ManagerTable = new List<ManagerRecord>();
-		private static List<employeeRecord> employeeTable = new List<employeeRecord>();
+		private static List<EmployeeRecord> employeeTable = new List<EmployeeRecord>();
 		private static List<EventRecord> EventTransactionTable = new List<EventRecord>();
 
 		static AccessPointDAL ()
@@ -55,14 +55,14 @@ namespace Crossover
 			ManagerTable.Add (new ManagerRecord("emp1", "dept1"));
 			ManagerTable.Add (new ManagerRecord("emp2", "dept2"));
 
-			employeeTable.Add(new employeeRecord("emp1", "/site1/dept1/bldg1"));
-			employeeTable.Add(new employeeRecord("emp2", "/site1/dept2/bldg1"));
-			employeeTable.Add(new employeeRecord("emp3", "/site1/dept1/bldg1"));
-			employeeTable.Add(new employeeRecord("emp4", "/site1/dept1/bldg1"));
-			employeeTable.Add(new employeeRecord("emp5", "/site1/dept1/bldg1"));
-			employeeTable.Add(new employeeRecord("emp6", "/site1/dept2/bldg1"));
-			employeeTable.Add(new employeeRecord("emp7", "/site1/dept2/bldg1"));
-			employeeTable.Add(new employeeRecord("emp8", "/site1/dept2/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp1", "/site1/dept1/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp2", "/site1/dept2/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp3", "/site1/dept1/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp4", "/site1/dept1/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp5", "/site1/dept1/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp6", "/site1/dept2/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp7", "/site1/dept2/bldg1"));
+			employeeTable.Add(new EmployeeRecord("emp8", "/site1/dept2/bldg1"));
 		}
 
 		public static void AddLoginEvent(string AccessPointID, string empID)

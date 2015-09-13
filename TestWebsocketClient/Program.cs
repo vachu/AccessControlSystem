@@ -10,7 +10,12 @@ namespace TestWebsocketClient
 
 		public static void Main (string[] args)
 		{
-			using (var ws = new WebSocket ("ws://localhost:55555" + CONTAINER_NAME)) {
+			if (args.Length != 1) {
+				Console.Error.WriteLine ("ERROR: need a valid Websocket URL");
+				Environment.Exit (-1);
+			}
+
+			using (var ws = new WebSocket (args[0])) {
 				Int64 syncCtr = 0;
 				ws.OnMessage += (sender, e) => {
 					Console.WriteLine (e.Data);
@@ -18,8 +23,8 @@ namespace TestWebsocketClient
 				};
 				ws.Connect ();
 				if (!ws.IsAlive) {
-					Console.Error.WriteLine ("ERROR: Could not connect to Websocket Server");
-					return;
+					Console.Error.WriteLine ("ERROR: Could not connect to Websocket Server {0}", args[0]);
+					Environment.Exit(-2);
 				}
 
 				var input = "";

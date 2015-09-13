@@ -29,6 +29,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="websocket-sharp">
+      <HintPath>..\3rdParty\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -40,6 +43,10 @@
     <ProjectReference Include="..\AccessPointDAL\AccessPointDAL.csproj">
       <Project>{7B6421C2-96CE-4A62-A885-9724EF417B29}</Project>
       <Name>AccessPointDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceManager\DeviceManager.csproj">
+      <Project>{5733ACCA-E893-4060-82B6-1F7DF0BDC7AD}</Project>
+      <Name>DeviceManager</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -17,8 +17,10 @@ namespace Crossover
 			 * else if (...) -> we could create WCF clients for Remote AccessPoints in future
 			 * based on the URL type
 			 * */
-			else
+			else {
+				DeviceManager.Init (ID);
 				return new AccessPoint (ID);
+			}
 		}
 
 		public static void DumpAccessPointLinks(Dictionary<string, IAccessPoint> accPtMap)
@@ -37,6 +39,23 @@ namespace Crossover
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Actuall inits and starts all AccessPoint components.  Must be called by the Container before
+		/// the system becomes functional
+		/// </summary>
+		public static void Start()
+		{
+			DeviceManager.Start ();
+		}
+
+		/// <summary>
+		/// Must be called before the Container terminates
+		/// </summary>
+		public static void Stop()
+		{
+			DeviceManager.Stop ();
 		}
 	}
 

@@ -8,7 +8,7 @@ namespace AccessPointContainer
 {
 	class MainClass
 	{
-		private const string CONTAINER_NAME = "/Site1/access_control_system/demo";
+		private const string CONTAINER_NAME = "/site1/demo";
 
 		internal static Dictionary<string, IAccessPoint> s_accPtMap =
 			new Dictionary<string, IAccessPoint>(StringComparer.CurrentCultureIgnoreCase);
@@ -54,13 +54,14 @@ namespace AccessPointContainer
 				s_accPtMap ["/Site1"],
 				LinkType.Both
 			);
-			AccessPointFactory.DumpAccessPointLinks (s_accPtMap);
+			AccessPointFactory.Start ();
 			/*
 			 * ---- All AccessPoint linkings done ----
 			 * */
 
 			/* 
-			 * Start the Websocket Server to listen to incoming requests
+			 * Start the Container's Websocket Server to listen to incoming requests.
+			 * This WS server would be the interface to other external AccessPoints
 			 * */
 			var wssvr = new WebSocketServer ("ws://localhost:55555");
 			wssvr.AddWebSocketService<Behaviour> (CONTAINER_NAME);
@@ -76,6 +77,7 @@ namespace AccessPointContainer
 			}
 
 			wssvr.Stop ();
+			AccessPointFactory.Stop ();
 		}
 	}
 }
