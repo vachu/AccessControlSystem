@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessPointContainer", "Acc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebsocketClient", "TestWebsocketClient\TestWebsocketClient.csproj", "{555FF67A-E286-4816-B1B4-61FA1E675B8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessPointDAL", "AccessPointDAL\AccessPointDAL.csproj", "{7B6421C2-96CE-4A62-A885-9724EF417B29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{555FF67A-E286-4816-B1B4-61FA1E675B8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6421C2-96CE-4A62-A885-9724EF417B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6421C2-96CE-4A62-A885-9724EF417B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6421C2-96CE-4A62-A885-9724EF417B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6421C2-96CE-4A62-A885-9724EF417B29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
