@@ -10,16 +10,16 @@ namespace AccessPointContainer
 	{
 		private const string CONTAINER_NAME = "/Site1/access_control_system/demo";
 
-		private static Dictionary<string, IAccessPoint> s_accPtMap =
+		internal static Dictionary<string, IAccessPoint> s_accPtMap =
 			new Dictionary<string, IAccessPoint>(StringComparer.CurrentCultureIgnoreCase);
 
 		public static void Main (string[] args)
 		{
 			string[] accPtIDs = {
-				"/Site1",
-				"/Site1/Dept_1/Bldg_1",
-				"/Site1/Dept_2/Bldg_1",
-				"/Site1/Dept_3/Bldg_2",
+				"/site1",
+				"/site1/dept1/bldg1",
+				"/site1/dept2/bldg1",
+				"/site1/dept3/bldg2",
 				"ws://company-intranet-url/Site3",
 					// AccessPoint in a different Site / Container
 					// There could be multiple AccessPoint Containers in a single site
@@ -36,21 +36,21 @@ namespace AccessPointContainer
 			 * Ideally, this link-creation must be configurable through a config file or
 			 * a Configuration Utlity but this is a demo after all.
 			 * */
-			s_accPtMap ["/Site1"].LinkTo ( // Site1's main access point to Site3's
+			s_accPtMap ["/site1"].LinkTo ( // Site1's main access point to Site3's
 				s_accPtMap ["ws://company-intranet-url/Site3"],
 				LinkType.Both
 			);
 
 			// Link all Site1's non-main AccessPoints to the main one
-			s_accPtMap ["/Site1/Dept_1/Bldg_1"].LinkTo (
+			s_accPtMap ["/Site1/Dept1/Bldg1"].LinkTo (
 				s_accPtMap ["/Site1"],
 				LinkType.Both
 			);
-			s_accPtMap ["/Site1/Dept_2/Bldg_1"].LinkTo (
+			s_accPtMap ["/Site1/Dept2/Bldg1"].LinkTo (
 				s_accPtMap ["/Site1"],
 				LinkType.Both
 			);
-			s_accPtMap ["/Site1/Dept_3/Bldg_2"].LinkTo (
+			s_accPtMap ["/Site1/Dept3/Bldg2"].LinkTo (
 				s_accPtMap ["/Site1"],
 				LinkType.Both
 			);

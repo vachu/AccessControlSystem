@@ -36,4 +36,10 @@
     <Compile Include="Interfaces.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\AccessPointDAL\AccessPointDAL.csproj">
+      <Project>{7B6421C2-96CE-4A62-A885-9724EF417B29}</Project>
+      <Name>AccessPointDAL</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

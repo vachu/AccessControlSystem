@@ -86,6 +86,24 @@ namespace Crossover
 				return m_ID;
 			}
 		}
+
+		public bool Login (string mgrId)
+		{
+			return AccessPointDAL.Login (mgrId, m_ID);
+			/*
+			 * TODO in future
+			 * Session Management
+			 * */
+		}
+
+		public bool Logout (string mgrId)
+		{
+			return AccessPointDAL.Logout (mgrId, m_ID);
+			/*
+			 * TODO in future
+			 * Session Management
+			 * */
+					}
 		#endregion
 	}
 
@@ -119,6 +137,15 @@ namespace Crossover
 			throw new NotImplementedException ();
 		}
 
+		public bool Login (string mgrId)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public bool Logout (string mgrId)
+		{
+			throw new NotImplementedException ();
+		}
 		#endregion
 	}
 }

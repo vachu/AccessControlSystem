@@ -37,12 +37,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebsocketSvr.cs" />
+    <Compile Include="ManagerOps.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\AccessPoint\AccessPoint.csproj">
       <Project>{1C9DBB1A-95B9-4B35-89DA-AE78BF00DF2A}</Project>
       <Name>AccessPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AccessPointDAL\AccessPointDAL.csproj">
+      <Project>{7B6421C2-96CE-4A62-A885-9724EF417B29}</Project>
+      <Name>AccessPointDAL</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

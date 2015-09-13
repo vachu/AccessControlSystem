@@ -5,6 +5,8 @@
 	/// </summary>
 	public interface IManager
 	{
+		bool Login (string mgrId); // Rudimentary; for demo only
+		bool Logout(string mgrId); // Rudimentary; for demo only
 	}
 
 	/// <summary>

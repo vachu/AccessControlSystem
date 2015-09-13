@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/*
+ * In the real production version of this system, this DAL shall be the gateway to all
+ * DB and LDAP operations.  Now, for the demo / POC, this is just a mock for the DB and LDAP
+ * 
+ * All the test data for the demo are hard-coded here
+ * */
+
 namespace Crossover
 {
 	public static class AccessPointDAL
 	{
 		private struct ManagerRecord {
-			string EmpID;
-			string Dept;
+			internal string EmpID;
+			internal string Dept;
 			public ManagerRecord(string id, string dept)
 			{
 				EmpID = id;
@@ -15,10 +22,10 @@ namespace Crossover
 			}
 		}
 
-		private struct EmployeeRecord {
+		private struct employeeRecord {
 			string EmpID;
 			string AccessPointID;
-			public EmployeeRecord(string id, string accPtId)
+			public employeeRecord(string id, string accPtId)
 			{
 				EmpID = id;
 				AccessPointID = accPtId;
@@ -29,69 +36,103 @@ namespace Crossover
 			DateTime Time;
 			string EventID;
 			string AccessPointID;
-			string EmpID;
+			string empID;
 			public EventRecord(DateTime time, string evID, string accPtId, string empId)
 			{
 				Time = time;
 				EventID = evID;
 				AccessPointID = accPtId;
-				EmpID = empId;
+				empID = empId;
 			}
 		}
 
 		private static List<ManagerRecord> ManagerTable = new List<ManagerRecord>();
-		private static List<EmployeeRecord> EmployeeTable = new List<EmployeeRecord>();
+		private static List<employeeRecord> employeeTable = new List<employeeRecord>();
 		private static List<EventRecord> EventTransactionTable = new List<EventRecord>();
 
 		static AccessPointDAL ()
 		{
-			ManagerTable.Add (new ManagerRecord("Emp1", "Dept_1"));
-			ManagerTable.Add (new ManagerRecord("Emp2", "Dept_2"));
+			ManagerTable.Add (new ManagerRecord("emp1", "dept1"));
+			ManagerTable.Add (new ManagerRecord("emp2", "dept2"));
 
-			EmployeeTable.Add(new EmployeeRecord("Emp1", "/Site1/Dept_1/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp2", "/Site1/Dept_2/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp3", "/Site1/Dept_1/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp4", "/Site1/Dept_1/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp5", "/Site1/Dept_1/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp6", "/Site1/Dept_2/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp7", "/Site1/Dept_2/Bldg_1"));
-			EmployeeTable.Add(new EmployeeRecord("Emp8", "/Site1/Dept_2/Bldg_1"));
+			employeeTable.Add(new employeeRecord("emp1", "/site1/dept1/bldg1"));
+			employeeTable.Add(new employeeRecord("emp2", "/site1/dept2/bldg1"));
+			employeeTable.Add(new employeeRecord("emp3", "/site1/dept1/bldg1"));
+			employeeTable.Add(new employeeRecord("emp4", "/site1/dept1/bldg1"));
+			employeeTable.Add(new employeeRecord("emp5", "/site1/dept1/bldg1"));
+			employeeTable.Add(new employeeRecord("emp6", "/site1/dept2/bldg1"));
+			employeeTable.Add(new employeeRecord("emp7", "/site1/dept2/bldg1"));
+			employeeTable.Add(new employeeRecord("emp8", "/site1/dept2/bldg1"));
 		}
 
-		public static void AddLoginEvent(string AccessPointID, string EmpID)
+		public static void AddLoginEvent(string AccessPointID, string empID)
 		{
 			EventTransactionTable.Add(
 				new EventRecord(
 					DateTime.Now,
 					"LOGIN",
 					AccessPointID,
-					EmpID
+					empID
 				)
 			);
 		}
 
-		public static void AddCheckinEvent(string AccessPointID, string EmpID)
+		public static void AddLogoutEvent(string AccessPointID, string empID)
+		{
+			EventTransactionTable.Add(
+				new EventRecord(
+					DateTime.Now,
+					"LOGOUT",
+					AccessPointID,
+					empID
+				)
+			);
+		}
+
+		public static void AddCheckinEvent(string AccessPointID, string empID)
 		{
 			EventTransactionTable.Add(
 				new EventRecord(
 					DateTime.Now,
 					"IN",
 					AccessPointID,
-					EmpID
+					empID
 				)
 			);
 		}
 
-		public static void AddCheckoutEvent(string AccessPointID, string EmpID)
+		public static void AddCheckoutEvent(string AccessPointID, string empID)
 		{
 			EventTransactionTable.Add(
 				new EventRecord(
 					DateTime.Now,
 					"OUT",
 					AccessPointID,
-					EmpID
+					empID
 				)
 			);
+		}
+
+		public static bool Login(string mgrId, string AccessPointID)
+		{
+			foreach (var rec in ManagerTable) {
+				if (rec.EmpID == mgrId) {
+					AddLoginEvent (AccessPointID, mgrId);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool Logout(string mgrId, string AccessPointID)
+		{
+			foreach (var rec in ManagerTable) {
+				if (rec.EmpID == mgrId) {
+					AddLogoutEvent (AccessPointID, mgrId);
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
