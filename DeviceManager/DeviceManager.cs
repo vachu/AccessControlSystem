@@ -45,18 +45,46 @@ namespace Crossover
 
 		public DeviceManager()
 		{
-			//m_msgHandlerMap ["login"] = ManagerOps.Login;
-			//m_msgHandlerMap ["logout"] = ManagerOps.Logout;
+			m_msgHandlerMap ["checkin"] = DeviceHandler.Checkin;
+			m_msgHandlerMap ["checkout"] = DeviceHandler.Checkout;
 		}
 
+		private static object s_lockObj = new object();
+		private static Dictionary<string, WebSocket> s_accPtClients =
+			new Dictionary<string, WebSocket>();
+
+		internal static WebSocket GetClientWS(string ID)
+		{
+			if (s_accPtClients.ContainsKey (ID)) {
+				return s_accPtClients [ID];
+			}
+			return null;
+		}
+
+		private string m_accPtClientID;
 		protected override void OnOpen()
 		{
+			m_accPtClientID = Context.QueryString ["access_point_id"];
+			if (!string.IsNullOrWhiteSpace (m_accPtClientID)) {
+				m_accPtClientID = m_accPtClientID.Trim ();
+				lock (s_lockObj) {
+					s_accPtClients [m_accPtClientID] = Context.WebSocket;
+				}
+			}
 		}
 
 		protected override void OnMessage(MessageEventArgs e)
 		{
-			var res = DispatchMessage (e);
-			Send (res);
+			if (e.Type == Opcode.Close) {
+				lock (s_lockObj) {
+					if (s_accPtClients.ContainsKey (m_accPtClientID)) {
+						s_accPtClients.Remove (m_accPtClientID);
+					}
+				}
+			} else {
+				var res = DispatchMessage (e);
+				Send (res);
+			}
 		}
 
 		private string DispatchMessage(MessageEventArgs e) {
@@ -78,12 +106,37 @@ namespace Crossover
 			if (m_msgHandlerMap.ContainsKey (fields [0])) {
 				return m_msgHandlerMap [fields [0]] (fields);
 			}
-			return "ERROR: Could not handle unknown command";
+			return "ERROR: Unknown command - " + fields[0];
 		}
 	}
 
 	internal static class DeviceHandler
 	{
+		public static string Checkin(string[] fields)
+		{
+			// Expected cmd line: checkin <emp-id> <access-point-id>
+			if (fields.Length == 3) {
+				var ws = DeviceManager.GetClientWS (fields [2]);
+				if (ws != null) {
+					ws.Send (string.Join (" ", fields));
+					return "OK: checkin relayed";
+				}
+			}
+			return "ERROR: Illegal args for 'checkin'";
+		}
+
+		public static string Checkout(string[] fields)
+		{
+			// Expected cmd line: checkout <emp-id> <access-point-id>
+			if (fields.Length == 3) {
+				var ws = DeviceManager.GetClientWS (fields [2]);
+				if (ws != null) {
+					ws.Send (string.Join (" ", fields));
+					return "OK: checkout relayed";
+				}
+			}
+			return "ERROR: Illegal args for 'checkout'";
+		}
 	}
 }
 

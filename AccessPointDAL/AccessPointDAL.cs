@@ -12,7 +12,7 @@ namespace Crossover
 {
 	public static class AccessPointDAL
 	{
-		private struct ManagerRecord {
+		internal struct ManagerRecord {
 			internal string EmpID;
 			internal string Dept;
 			public ManagerRecord(string id, string dept)
@@ -22,9 +22,9 @@ namespace Crossover
 			}
 		}
 
-		private struct EmployeeRecord {
-			string EmpID;
-			string AccessPointID;
+		internal struct EmployeeRecord {
+			internal string EmpID;
+			internal string AccessPointID;
 			public EmployeeRecord(string id, string accPtId)
 			{
 				EmpID = id;
@@ -32,11 +32,11 @@ namespace Crossover
 			}
 		}
 
-		private struct EventRecord {
-			DateTime Time;
-			string EventID;
-			string AccessPointID;
-			string empID;
+		internal struct EventRecord {
+			internal DateTime Time;
+			internal string EventID;
+			internal string AccessPointID;
+			internal string empID;
 			public EventRecord(DateTime time, string evID, string accPtId, string empId)
 			{
 				Time = time;
@@ -46,9 +46,9 @@ namespace Crossover
 			}
 		}
 
-		private static List<ManagerRecord> ManagerTable = new List<ManagerRecord>();
-		private static List<EmployeeRecord> employeeTable = new List<EmployeeRecord>();
-		private static List<EventRecord> EventTransactionTable = new List<EventRecord>();
+		internal static List<ManagerRecord> ManagerTable = new List<ManagerRecord>();
+		internal static List<EmployeeRecord> employeeTable = new List<EmployeeRecord>();
+		internal static List<EventRecord> EventTransactionTable = new List<EventRecord>();
 
 		static AccessPointDAL ()
 		{
@@ -113,6 +113,30 @@ namespace Crossover
 			);
 		}
 
+		public static void AddIntrusionEvent(string AccessPointID, string empID)
+		{
+			EventTransactionTable.Add (
+				new EventRecord(
+					DateTime.Now,
+					"INTRUSION",
+					AccessPointID,
+					empID
+				)
+			);
+		}
+
+		public static void AddOutrusionEvent(string AccessPointID, string empID)
+		{
+			EventTransactionTable.Add (
+				new EventRecord(
+					DateTime.Now,
+					"OUTRUSION",
+					AccessPointID,
+					empID
+				)
+			);
+		}
+
 		public static bool Login(string mgrId, string AccessPointID)
 		{
 			foreach (var rec in ManagerTable) {
@@ -132,6 +156,32 @@ namespace Crossover
 					return true;
 				}
 			}
+			return false;
+		}
+
+		public static bool Checkin(string empId, string AccessPointID)
+		{
+			foreach (var rec in employeeTable) {
+				if (string.Compare (rec.EmpID, empId, true) == 0 &&
+				    string.Compare (rec.AccessPointID, AccessPointID, true) == 0) {
+					AddCheckinEvent (AccessPointID, empId);
+					return true;
+				}
+			}
+			AddIntrusionEvent (AccessPointID, empId);
+			return false;
+		}
+
+		public static bool Checkout(string empId, string AccessPointID)
+		{
+			foreach (var rec in employeeTable) {
+				if (string.Compare (rec.EmpID, empId, true) == 0 &&
+					string.Compare (rec.AccessPointID, AccessPointID, true) == 0) {
+					AddCheckoutEvent (AccessPointID, empId);
+					return true;
+				}
+			}
+			AddOutrusionEvent (AccessPointID, empId);
 			return false;
 		}
 	}

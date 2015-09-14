@@ -53,7 +53,8 @@ namespace Crossover
 		{
 			DeviceManager.Start ();
 			foreach (var accPt in s_LocalAccPts) {
-				accPt.Connect2DeviceManager ("ws://localhost:44444/" + accPt.ID);
+				accPt.Connect2DeviceManager ("ws://localhost:44444" + accPt.ID);
+					// Each AccessPoint is websocket client to its DeviceManager
 			}
 		}
 
@@ -75,23 +76,38 @@ namespace Crossover
 
 		internal void Connect2DeviceManager(string url)
 		{
-			m_wsDevMgr = new WebSocket (url + m_ID + "/?access_point_id=" + m_ID);
+			m_wsDevMgr = new WebSocket (url + "/?access_point_id=" + m_ID);
 			m_wsDevMgr.OnMessage += (sender, e) => {
-				ProcessDeviceManagerEvent (e.Data);
+				if (e.Type == Opcode.Text) {
+					ProcessDeviceManagerEvent (e.Data);
+				}
 			};
 			m_wsDevMgr.Connect ();
 			if (!m_wsDevMgr.IsAlive) {
 				throw new ApplicationException (
-					"EXCEPTION: DeviceManager connect failed - " + m_wsDevMgr.Url
+					"EXCEPTION: connect to DeviceManager FAILED - " + m_wsDevMgr.Url
 				);
 			}
 		}
 
 		private void ProcessDeviceManagerEvent(string msg)
 		{
+			char[] WHITESPACE_CHARS = { '\b', '\t', ' ', '\n', '\v', '\f', '\a' };
+			msg = msg.Trim ();
+			var fields = msg.Split(WHITESPACE_CHARS);
+			if (fields.Length == 3 && string.Compare(fields[2], m_ID, true) == 0) {
+				if (string.Compare (fields [0], "checkin", true) == 0) { // check-in event from DeviceManager
+					Console.WriteLine("RECEIVED: " + msg);
+					AccessPointDAL.Checkin (fields [1], m_ID);
+				}
+				if (string.Compare(fields[0], "checkout", true) == 0) { // check-out event from DeviceManager
+					Console.WriteLine("RECEIVED: " + msg);
+					AccessPointDAL.Checkout (fields [1], m_ID);
+				}
+			}
 		}
 
-		internal void DisconnectDeviceManager()
+		internal void DisconnectDeviceManager()			
 		{
 			if (m_wsDevMgr.IsAlive) {
 				m_wsDevMgr.Close ();
