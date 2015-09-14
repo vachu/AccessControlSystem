@@ -49,6 +49,10 @@ namespace Crossover
 			//m_msgHandlerMap ["logout"] = ManagerOps.Logout;
 		}
 
+		protected override void OnOpen()
+		{
+		}
+
 		protected override void OnMessage(MessageEventArgs e)
 		{
 			var res = DispatchMessage (e);
@@ -76,6 +80,10 @@ namespace Crossover
 			}
 			return "ERROR: Could not handle unknown command";
 		}
+	}
+
+	internal static class DeviceHandler
+	{
 	}
 }
 

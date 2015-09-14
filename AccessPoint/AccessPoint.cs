@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebSocketSharp;
 
 namespace Crossover
 {
 	public static class AccessPointFactory
 	{
+		private static List<AccessPoint> s_LocalAccPts = new List<AccessPoint> ();
 		public static IAccessPoint Create(string ID)
 		{
 			if (string.IsNullOrWhiteSpace (ID))
@@ -19,7 +21,9 @@ namespace Crossover
 			 * */
 			else {
 				DeviceManager.Init (ID);
-				return new AccessPoint (ID);
+				var accPt = new AccessPoint (ID);
+				s_LocalAccPts.Add (accPt);
+				return accPt;
 			}
 		}
 
@@ -48,6 +52,9 @@ namespace Crossover
 		public static void Start()
 		{
 			DeviceManager.Start ();
+			foreach (var accPt in s_LocalAccPts) {
+				accPt.Connect2DeviceManager ("ws://localhost:44444/" + accPt.ID);
+			}
 		}
 
 		/// <summary>
@@ -55,14 +62,43 @@ namespace Crossover
 		/// </summary>
 		public static void Stop()
 		{
+			foreach (var accPt in s_LocalAccPts) {
+				accPt.DisconnectDeviceManager ();
+			}
 			DeviceManager.Stop ();
 		}
 	}
 
 	internal class AccessPoint : IAccessPoint
 	{
-		private string m_ID;
+		WebSocket m_wsDevMgr;
 
+		internal void Connect2DeviceManager(string url)
+		{
+			m_wsDevMgr = new WebSocket (url + m_ID + "/?access_point_id=" + m_ID);
+			m_wsDevMgr.OnMessage += (sender, e) => {
+				ProcessDeviceManagerEvent (e.Data);
+			};
+			m_wsDevMgr.Connect ();
+			if (!m_wsDevMgr.IsAlive) {
+				throw new ApplicationException (
+					"EXCEPTION: DeviceManager connect failed - " + m_wsDevMgr.Url
+				);
+			}
+		}
+
+		private void ProcessDeviceManagerEvent(string msg)
+		{
+		}
+
+		internal void DisconnectDeviceManager()
+		{
+			if (m_wsDevMgr.IsAlive) {
+				m_wsDevMgr.Close ();
+			}
+		}
+
+		private string m_ID;
 		internal AccessPoint (string ID)
 		{
 			m_ID = ID;
